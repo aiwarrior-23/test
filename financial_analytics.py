@@ -73,7 +73,9 @@ def generate_bar_chart(breakdown, output_path="expenses_by_category.png"):
     amounts = list(breakdown.values())
 
     plt.figure(figsize=(10, 6))
-    bars = plt.bar(categories, amounts, color=["#e74c3c", "#3498db", "#2ecc71", "#f39c12"])
+    color_cycle = ["#e74c3c", "#3498db", "#2ecc71", "#f39c12"]
+    colors = [color_cycle[i % len(color_cycle)] for i in range(len(categories))]
+    bars = plt.bar(categories, amounts, color=colors)
     plt.title("Expenses by Category", fontsize=16, fontweight="bold")
     plt.xlabel("Category", fontsize=12)
     plt.ylabel("Amount ($)", fontsize=12)
@@ -144,7 +146,7 @@ def print_financial_summary(income_list, expenses_list, total_income, total_expe
 
     print("\n--- Spending Breakdown by Category ---")
     for category, amount in sorted(breakdown.items(), key=lambda x: x[1], reverse=True):
-        pct = (amount / abs(total_expenses)) * 100
+        pct = (amount / abs(total_expenses)) * 100 if total_expenses != 0 else 0
         print(f"  {category:<15} ${amount:>10,.2f}  ({pct:5.1f}%)")
 
     print("\n" + "=" * 55)
