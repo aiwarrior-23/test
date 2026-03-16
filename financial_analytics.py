@@ -98,6 +98,30 @@ def generate_bar_chart(breakdown, output_path="expenses_by_category.png"):
     print(f"\nBar chart saved to: {output_path}")
 
 
+def generate_pie_chart(breakdown, output_path="expense_distribution.png"):
+    """Generate a pie chart showing expense distribution by category."""
+    categories = list(breakdown.keys())
+    amounts = list(breakdown.values())
+    colors = ["#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6", "#1abc9c"]
+
+    plt.figure(figsize=(8, 8))
+    wedges, texts, autotexts = plt.pie(
+        amounts,
+        labels=categories,
+        autopct="%1.1f%%",
+        colors=colors[:len(categories)],
+        startangle=140,
+        textprops={"fontsize": 12},
+    )
+    for autotext in autotexts:
+        autotext.set_fontweight("bold")
+    plt.title("Expense Distribution by Category", fontsize=16, fontweight="bold")
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150)
+    plt.close()
+    print(f"Pie chart saved to: {output_path}")
+
+
 def print_financial_summary(income_list, expenses_list, total_income, total_expenses, net_savings, breakdown):
     """Print a formatted financial summary report."""
     print("=" * 55)
@@ -152,6 +176,10 @@ def main():
     # 7. Generate bar chart
     chart_path = os.path.join(script_dir, "expenses_by_category.png")
     generate_bar_chart(breakdown, output_path=chart_path)
+
+    # 7b. Generate pie chart
+    pie_path = os.path.join(script_dir, "expense_distribution.png")
+    generate_pie_chart(breakdown, output_path=pie_path)
 
     # 8. Print financial summary report
     print_financial_summary(
